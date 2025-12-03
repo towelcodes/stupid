@@ -15,11 +15,11 @@ async fn root(bytes: Bytes) -> impl Responder {
     m.put_u8(0x00);
     stream.write_all(&m).unwrap();
 
-    let mut buf = [0u8; 1024];
+    let mut buf: Vec<u8> = vec![];
     let n = stream.read(&mut buf).unwrap();
     println!("got {} bytes: {:?}", n, &buf[..n]);
 
-    HttpResponse::Ok()
+    HttpResponse::Ok().body(String::from_utf8(buf).unwrap_or("".into()))
 }
 
 #[actix_web::main]
